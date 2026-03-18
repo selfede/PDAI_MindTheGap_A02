@@ -435,6 +435,7 @@ with tab1:
 
     if st.button("Retrieve application information") and new_jds:
         with st.spinner("AI is reading the job descriptions. Please hold..."):
+            import time
             new_rows, new_jd_texts, new_jd_skills = [], [], []
             for jd_file in new_jds:
                 jd_text = extract_text(jd_file)
@@ -455,12 +456,14 @@ with tab1:
                         })
                         new_jd_texts.append(jd_text)
                         try:
+                            time.sleep(3)  #avoid hitting groq 8000 TPM rate limit when processing multiple JDs
                             skills_list = extract_jd_skills(jd_text)  #vs A01 version i already extract skills > raw text here, so ready for analysis
                         except Exception:
                             skills_list = []
                         new_jd_skills.append(skills_list)
                 except Exception as e:
                     st.warning(f"Could not parse {jd_file.name}: {e}")
+                time.sleep(2)  #pause between JDs to stay within rate limit
 
             if new_rows:
                 start_idx = len(st.session_state.app_df)
