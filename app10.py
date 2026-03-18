@@ -136,15 +136,15 @@ def generate_profile_summary(cv_text, transcript_text):
 def extract_skill_keyword(sentence):
     """Extract 1-2 core words from a full skill sentence for display and Coursera search."""
     s = sentence.strip()
-    # Strip common openers that aren't the skill itself
+    #removes common openers
     for pattern in [
         r'^(Strong|Excellent|Proven|Clear|Effective|Advanced|Solid|Deep)\s+',
         r'^(Experience|Knowledge|Understanding|Proficiency|Expertise)\s+(in|of|with)\s+',
         r'^(Ability|Skills?)\s+to\s+',
+        r'^[A-Z][a-z]+ing\s+',   #removes -ing verbs which were problematic
     ]:
         s = re.sub(pattern, '', s, flags=re.IGNORECASE)
-    # Take first 3 words, drop trailing filler
-    stop = {'and', 'or', 'to', 'for', 'in', 'with', 'of', 'a', 'the', 'skills', 'skill'}
+    stop = {'and', 'or', 'to', 'for', 'in', 'with', 'of', 'a', 'the', 'skills', 'skill'} #drop fillers
     words = [w.rstrip('.,;:') for w in s.split()[:4] if w.lower().rstrip('.,;:') not in stop][:2]
     return ' '.join(words).title() or sentence.split()[0].title()
 
