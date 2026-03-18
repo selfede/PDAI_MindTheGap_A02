@@ -3,3 +3,6 @@ pandas
 PyPDF2
 requests
 plotly
+numpy
+sentence-transformers
+scikit-learn
